@@ -18,8 +18,7 @@ This is the Log And Audit Performance Tests implemented in Scala using Gatling.
 This is repository for the LAU Performance Tests
 - Step1: Clone the repo to your local/VM to run
 - Step2: cd into the lau-performance directory
-- Step3: Edit the run time settings from the LAU.scala simulation file
-- Step4: Run the test with the command `gradle gatlingRun`
+- Step3: Run the test with the command `gradle gatlingRun`
 
 ## Building and deploying the application
 
