@@ -49,7 +49,7 @@ gatling {
     gatlingVersion '3.9.0'
     scalaVersion '2.13.9'
     simulations = {
-        include "uk/gov/hmcts/reform/LandA.performance/simulations/mainSimulation.scala"
+        include "uk/gov/hmcts/reform/LandA/performance/simulations/mainSimulation.scala"
     }
 }
 dependencyCheck {
