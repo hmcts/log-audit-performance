@@ -1,7 +1,7 @@
 plugins {
-    id 'org.owasp.dependencycheck' version '6.0.1'
+    id 'org.owasp.dependencycheck' version '8.0.2'
     id 'scala'
-    id 'com.github.lkishalmi.gatling' version '3.0.2'
+    id 'io.gatling.gradle' version '3.9.0'
     //id 'java-gradle-plugin'
     id 'groovy'
     id 'com.gradle.plugin-publish' version '0.9.8'
@@ -10,11 +10,18 @@ plugins {
 }
 //apply plugin: 'java'
 apply plugin: 'scala'
+apply plugin: 'io.gatling.gradle'
 apply plugin: 'application'
 group 'uk.gov.hmcts.reform'
 version = '1.0'
-sourceCompatibility = "11"
-targetCompatibility = "11"
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
+tasks.withType(JavaExec).configureEach {
+    javaLauncher.set(javaToolchains.launcherFor(java.toolchain))
+}
 tasks.withType(JavaExec) {
     jvmArgs = ['-Xms1024m', '-Xmx2048m']
     /* Use the following args to build a report when a test was terminated
@@ -24,31 +31,56 @@ tasks.withType(JavaExec) {
         ]
     */
 }
+tasks.withType(Copy).all{
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
 repositories {
     jcenter()
 }
-ScalaCompileOptions.metaClass.daemonServer = true
+/*ScalaCompileOptions.metaClass.daemonServer = true
 ScalaCompileOptions.metaClass.fork = true
 ScalaCompileOptions.metaClass.useAnt = false
 ScalaCompileOptions.metaClass.useCompileDaemon = false
 ext {
     gatlingVersion = '3.3.1'
     scalaVersion = '2.12.12'
+}*/
+gatling {
+    gatlingVersion '3.9.0'
+    scalaVersion '2.13.9'
+    simulations = {
+        include "uk/gov/hmcts/reform/LandA.performance/simulations/mainSimulation.scala"
+    }
 }
+dependencyCheck {
+    analyzers.assemblyEnabled = false
+}
+
 dependencies {
+    implementation group: 'io.gatling.highcharts', name: 'gatling-charts-highcharts', version: '3.9.0'
+}
+
+/*dependencies {
     compile "org.scala-lang:scala-library:${scalaVersion}"
     gatling "io.gatling:gatling-app:${gatlingVersion}"
     gatling "io.gatling.highcharts:gatling-charts-highcharts:${gatlingVersion}"
     //gatlingImplementation "groupio.rest-assured:rest-assured:4.3.1"
     gatling "com.warrenstrange:googleauth:1.5.0"
+}*/
+
+sourceSets {
+    gatling {
+        scala {
+            srcDir 'src/gatling/simulations'
+        }
+        resources {
+            srcDir 'src/gatling/resources'
+        }
+    }
 }
-gatling {
-    toolVersion '3.3.1'
-    scalaVersion '2.12.12'
-    simulations = [ 'uk.gov.hmcts.reform.LandA.performance.simulations.mainSimulation'
-    ]
-}
-test {
+
+
+/*test {
     testLogging {
         showStandardStreams = true
     }
@@ -60,5 +92,7 @@ pluginBundle {
     vcsUrl = 'https://github.com/lkishalmi/gradle-gatling-plugin'
     description = 'Gatling Simulation Execution'
     tags = ['gatling', 'load test', 'stress test', 'performance test', 'scala']
+}
+ext ['netty.version'] = '4.0.51.Final'*/
 }
 ext ['netty.version'] = '4.0.51.Final'
