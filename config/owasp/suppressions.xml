@@ -13,5 +13,9 @@
         <sha1>8032138f12c0180bc4e51fe139d4c52b46db6109</sha1>
         <cve>CVE-2017-18640</cve>
     </suppress>
+    <suppress>
+        <notes>False positive as project does not contain json-java or hutool</notes>
+        <cve>CVE-2022-45688</cve>
+    </suppress>
    
 </suppressions>
