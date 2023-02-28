@@ -13,6 +13,8 @@ apply plugin: 'scala'
 apply plugin: 'io.gatling.gradle'
 apply plugin: 'application'
 group 'uk.gov.hmcts.reform'
+apply plugin: "org.owasp.dependencycheck"
+
 version = '1.0'
 java {
     toolchain {
@@ -46,7 +48,15 @@ gatling {
     }
 }
 dependencyCheck {
-    analyzers.assemblyEnabled = false
+    // Specifies if the build should be failed if a CVSS score above a specified level is identified.
+    // range of 0-10 fails the build, anything greater and it doesn't fail the build
+    failBuildOnCVSS = System.getProperty('dependencyCheck.failBuild') == 'true' ? 0 : 11
+    suppressionFile = 'config/owasp/suppressions.xml'
+
+    analyzers {
+        // Disable scanning of .NET related binaries
+        assemblyEnabled = false
+    }
 }
 
 dependencies {
