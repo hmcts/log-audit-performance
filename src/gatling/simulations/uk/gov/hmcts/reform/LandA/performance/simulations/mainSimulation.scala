@@ -137,6 +137,7 @@ class mainSimulation extends Simulation {
   ).protocols(httpProtocol)
     .assertions(assertions(testType))
 
+
 }
 
 
