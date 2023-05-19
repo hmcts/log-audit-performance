@@ -33,7 +33,7 @@ object LAUScenarioDeletion {
 
   val LAULoginDeletion =
 
-    doSwitch("${env}") (
+    doSwitch("#{env}") (
       "perftest" -> feed(Users),
       "aat" -> feed(UsersAat)
     )
@@ -41,11 +41,11 @@ object LAUScenarioDeletion {
         exec(http("LAU Login")
           .post(IdamURL + "/login?client_id=lau&response_type=code&redirect_uri=" + BaseURL + "/oauth2/callback")
           .headers(CommonHeader.navigation_headers)
-          .formParam("username", "${email}")
-          .formParam("password", "${password}")
+          .formParam("username", "#{email}")
+          .formParam("password", "#{password}")
           .formParam("save", "Sign in")
           .formParam("selfRegistrationEnabled", "false")
-          .formParam("_csrf", "${csrfToken}")
+          .formParam("_csrf", "#{csrfToken}")
           .check(substring("Case Deletions Search")))
       }
       .pause(ThinkTime)
@@ -53,7 +53,7 @@ object LAUScenarioDeletion {
   //Perform a case audit search and download the CSV file
   val LAUCaseDeletionSearch =
 
-    doSwitch("${env}") (
+    doSwitch("#{env}") (
       "perftest" -> feed(CaseDeleteSearches),
       "aat" -> feed(CaseAuditSearchesAat)
     )
@@ -65,8 +65,8 @@ object LAUScenarioDeletion {
           .formParam("caseRef", "")
           .formParam("caseTypeId", "")
           .formParam("caseJurisdictionId", "cmc")
-          .formParam("startTimestamp", "${caseStartTimestamp}")
-          .formParam("endTimestamp", "${caseEndTimestamp}")
+          .formParam("startTimestamp", "#{caseStartTimestamp}")
+          .formParam("endTimestamp", "#{caseEndTimestamp}")
           .formParam("page", "1")
           .check(substring("Case Deletions Results"))
           .check(regex("""Case Deletions Results</li>(?s)\s*?<p class="govuk-body">No results found""").optional.saveAs("noCaseResults"))
@@ -78,10 +78,10 @@ object LAUScenarioDeletion {
 
 
     //only continue if results were found ('No results found' wasn't found on the results page)
-    .doIf("${noCaseResults.isUndefined()}") {
+    .doIf("#{noCaseResults.isUndefined()}") {
 
       //only load the second page if there are more pages available
-      doIf("${moreCasePages.exists()}") {
+      doIf("#{moreCasePages.exists()}") {
 
         group("LAU_140_CaseDeletionPage2") {
           exec(http("LAU Case Deletion Page 2")

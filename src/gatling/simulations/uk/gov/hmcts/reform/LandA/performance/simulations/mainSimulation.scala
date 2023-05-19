@@ -23,7 +23,7 @@ class mainSimulation extends Simulation {
   //set the environment based on the test type
   val environment = testType match {
     case "perftest" => "perftest"
-    case "pipeline" => "aat"
+    case "pipeline" => "perftest"
     case _ => "**INVALID**"
   }
   /* ******************************** */
@@ -57,8 +57,8 @@ class mainSimulation extends Simulation {
   }
 
   val LAUSimulation = scenario("LAU Simulation")
-   // .exitBlockOnFail {
-    .repeat(1) {
+    .exitBlockOnFail {
+    //.repeat(1) {
       exec(_.set("env", s"${env}"))
         .exec(LAUScenario.LAUHomepage)
         .exec(LAUScenario.LAULogin)
@@ -103,14 +103,14 @@ class mainSimulation extends Simulation {
       case "perftest" =>
         if (debugMode == "off") {
           Seq(
-            rampUsers(numberOfPerformanceTestUsers.toInt) during (testDurationMins minutes)
+            rampUsers(numberOfPerformanceTestUsers.toInt) during (testDurationMins.minutes)
           )
         }
         else{
           Seq(atOnceUsers(1))
         }
       case "pipeline" =>
-        Seq(rampUsers(numberOfPipelineUsers.toInt) during (2 minutes))
+        Seq(rampUsers(numberOfPipelineUsers.toInt) during (2.minutes))
       case _ =>
         Seq(nothingFor(0))
     }
