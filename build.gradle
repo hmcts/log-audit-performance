@@ -1,30 +1,18 @@
 plugins {
-    id 'org.owasp.dependencycheck' version '8.0.2'
+    id 'org.owasp.dependencycheck' version '8.2.1'
     id 'scala'
-    id 'io.gatling.gradle' version '3.9.0'
-    //id 'java-gradle-plugin'
-    id 'groovy'
-    id 'com.gradle.plugin-publish' version '0.9.8'
-    id 'maven-publish'
-    id 'application'
+    id 'java-library'
+    id 'io.gatling.gradle' version '3.9.3.1'
 }
-//apply plugin: 'java'
-apply plugin: 'scala'
-apply plugin: 'io.gatling.gradle'
-apply plugin: 'application'
-group 'uk.gov.hmcts.reform'
-apply plugin: "org.owasp.dependencycheck"
 
-version = '1.0'
 java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(17)
     }
 }
-tasks.withType(JavaExec).configureEach {
-    javaLauncher.set(javaToolchains.launcherFor(java.toolchain))
-}
+
 tasks.withType(JavaExec) {
+    // Configure the size of the JVM if necessary
     jvmArgs = ['-Xms1024m', '-Xmx2048m']
     /* Use the following args to build a report when a test was terminated
     args = [
@@ -33,34 +21,21 @@ tasks.withType(JavaExec) {
         ]
     */
 }
+
 tasks.withType(Copy).all{
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
+
 repositories {
-    jcenter()
+    mavenCentral()
 }
 
 gatling {
-    gatlingVersion '3.9.0'
-    scalaVersion '2.13.9'
+    gatlingVersion '3.9.3'
+    scalaVersion '2.13.10'
     simulations = {
         include "uk/gov/hmcts/reform/LandA/performance/simulations/mainSimulation.scala"
     }
-}
-dependencyCheck {
-    // Specifies if the build should be failed if a CVSS score above a specified level is identified.
-    // range of 0-10 fails the build, anything greater and it doesn't fail the build
-    failBuildOnCVSS = System.getProperty('dependencyCheck.failBuild') == 'true' ? 0 : 11
-    suppressionFile = 'config/owasp/suppressions.xml'
-
-    analyzers {
-        // Disable scanning of .NET related binaries
-        assemblyEnabled = false
-    }
-}
-
-dependencies {
-    implementation group: 'io.gatling.highcharts', name: 'gatling-charts-highcharts', version: '3.9.0'
 }
 
 sourceSets {
@@ -73,3 +48,4 @@ sourceSets {
         }
     }
 }
+
