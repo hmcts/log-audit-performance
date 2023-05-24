@@ -9,7 +9,7 @@ The L&A Case Audit microservice covers case activity (which includes case creati
 There are 3 types of seacrhes for this repo:
 The 'Case Activity' search brings back the user actions (such as View, Update,Create Etc) whereas the 'Case Searches' search shows how many cases the user accessed during their search.
 The 'Logon Results' search shows the results from each time the User log ins during a set time period. 
-Dhe deletion search shows the cases that have been deleted by the case disposer within a set time period.
+The deletion search shows the cases that have been deleted by the case disposer within a set time period.
 
 ## Overview
 
