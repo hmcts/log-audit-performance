@@ -1,7 +1,6 @@
 # LAU Performance Tests
 
 Gatling performance tests for Log and Audit
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ## Purpose
 
@@ -54,7 +53,3 @@ Flags: - Debug (single-user mode): -Ddebug=on e.g. ./gradlew gatlingRun -Ddebug=
   ```bash
   ./gradlew gatlingRun -Denv=aat
   ```
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details..
