@@ -13,6 +13,7 @@ This is repository for the LAU Performance Tests
 Step1: Clone the repo to your local/VM to run
 Step2: cd into the lau-performance directory
 Step3: Run the test with the command ./gradlew gatlingRun
+
 Users
 The Users in the Users.csv file have cft-audit-investigator role to access the audit search (you can also see deleted cases changing the activity to delete) and have the cft-audit-investigator and cft-service-logs roles to access the audit and deletion searches. The UsersDeletion users has the cft-service-logs role to just access the deletion search.
 
