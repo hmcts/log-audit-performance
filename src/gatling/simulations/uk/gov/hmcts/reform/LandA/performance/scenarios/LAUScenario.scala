@@ -45,7 +45,7 @@ object LAUScenario {
           .formParam("save", "Sign in")
           .formParam("selfRegistrationEnabled", "false")
           .formParam("_csrf", "#{csrfToken}")
-          .check(substring("Case Audit Search")))
+          .check(substring("Case audit")))
       }
       .pause(ThinkTime)
 
@@ -57,7 +57,7 @@ object LAUScenario {
       "aat" -> feed(CaseAuditSearchesAat)
     )
       .group("LAU_040_CaseAuditSearch") {
-        exec(http("LAU Case Audit Search")
+        exec(http("LAU Case audit")
           .post(BaseURL + "/case-search")
           .headers(CommonHeader.navigation_headers)
           .formParam("userId", "#{userID}")
@@ -67,8 +67,8 @@ object LAUScenario {
           .formParam("caseJurisdictionId", "#{caseJurisdictionId}")
           .formParam("endTimestamp", "#{caseEndTimestamp}")
           .formParam("page", "1")
-          .check(substring("Case Activity Results"))
-          .check(regex("""Case Activity Results</li>(?s)\s*?<p class="govuk-body">No results found""").optional.saveAs("noCaseResults"))
+          .check(substring("Case activity results"))
+          .check(regex("""Case activity results</li>(?s)\s*?<p class="govuk-body">No results found""").optional.saveAs("noCaseResults"))
           .check(substring("case-activity-next-btn").optional.saveAs("moreCasePages")))
       }
       .pause(ThinkTime)
@@ -125,7 +125,7 @@ object LAUScenario {
           .formParam("startTimestamp", "#{logonStartTimestamp}")
           .formParam("endTimestamp", "#{logonEndTimestamp}")
           .formParam("page", "1")
-          .check(regex("Logons Audit Results|System Logon Results"))
+          .check(regex("Results|System Logon Results"))
           .check(regex("""System Logon Results</h2>(?s)\s*?<p class="govuk-body">No results found""").optional.saveAs("noLogonResults"))
           .check(substring("logons-next-btn").optional.saveAs("moreLogonPages")))
       }
