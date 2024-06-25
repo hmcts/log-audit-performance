@@ -2,7 +2,7 @@ package uk.gov.hmcts.reform.LandA.performance.scenarios
 
 import io.gatling.core.Predef._
 import io.gatling.http.Predef._
-import utils.{Environment, CommonHeader}
+import utils.{CommonHeader, Environment}
 
 object LAUScenario {
 
@@ -49,6 +49,16 @@ object LAUScenario {
       }
       .pause(ThinkTime)
 
+  val RetrieveCsrfToken =
+
+    group("LAU_Csrf_Token") {
+      exec(http("LAU_Csrf_Token")
+        .get(BaseURL + "/csrf-token")
+        .headers(CommonHeader.navigation_headers)
+        .check(jsonPath("$.csrfToken").saveAs("csrfToken")))
+    }
+      .pause(ThinkTime)
+
   //Perform a case audit search and download the CSV file
   val LAUCaseAuditSearch =
 
@@ -60,6 +70,7 @@ object LAUScenario {
         exec(http("LAU Case audit")
           .post(BaseURL + "/case-search")
           .headers(CommonHeader.navigation_headers)
+          .formParam("_csrf", "#{csrfToken}")
           .formParam("userId", "#{userID}")
           .formParam("caseRef", "")
           .formParam("startTimestamp", "#{caseStartTimestamp}")
@@ -125,6 +136,7 @@ object LAUScenario {
           .formParam("startTimestamp", "#{logonStartTimestamp}")
           .formParam("endTimestamp", "#{logonEndTimestamp}")
           .formParam("page", "1")
+          .formParam("_csrf", "#{csrfToken}")
           .check(regex("Results|System Logon Results"))
           .check(regex("""System Logon Results</h2>(?s)\s*?<p class="govuk-body">No results found""").optional.saveAs("noLogonResults"))
           .check(substring("logons-next-btn").optional.saveAs("moreLogonPages")))

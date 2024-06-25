@@ -68,6 +68,7 @@ object LAUScenarioDeletion {
           .formParam("startTimestamp", "#{caseStartTimestamp}")
           .formParam("endTimestamp", "#{caseEndTimestamp}")
           .formParam("page", "1")
+          .formParam("_csrf", "#{csrfToken}")
           .check(substring("Case Deletions Results"))
           .check(regex("""Case Deletions Results</li>(?s)\s*?<p class="govuk-body">No results found""").optional.saveAs("noCaseResults"))
           .check(substring("case-deletions-next-btn").saveAs("moreCasePages")))

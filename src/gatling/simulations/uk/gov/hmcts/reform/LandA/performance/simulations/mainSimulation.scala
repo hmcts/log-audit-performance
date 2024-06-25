@@ -62,6 +62,7 @@ class mainSimulation extends Simulation {
       exec(_.set("env", s"${env}"))
         .exec(LAUScenario.LAUHomepage)
         .exec(LAUScenario.LAULogin)
+        .exec(LAUScenario.RetrieveCsrfToken)
         .repeat(5) {
           exec(LAUScenario.LAUCaseAuditSearch)
             .exec(LAUScenario.LogonsAuditSearch)
